@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <!-- Webpage Title -->
+    <title>Log In | SWEETER</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <script>
+        // {% if msg %}
+        //     alert("{{ msg }}")
+        // {% endif %}
+        function sign_in() {
+            let userid = $("#userid").val()
+            let userpw = $("#userpw").val();
+            $.ajax({
+                type: "POST",
+                url: "/sign_in",
+                data: {
+                    username_give: userid,
+                    password_give: userpw
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        $.cookie('mytoken', response['token'], {path: '/'});
+
+                        alert('로그인 완료!')
+                        window.location.href = '/'
+                    } else {
+                        // 로그인이 안되면 에러메시지를 띄웁니다.
+                        alert(response['msg'])
+                    }
+                }
+            })
+        }
+
+
+    </script>
+    <style>
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+        .login-box > h1 {
+            font-size: 30px;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        .wrap {
+            max-width: 500px;
+            width: 95%;
+            height: 550px;
+            margin: 10px auto;
+            border: 1px solid rgba(100, 100, 100, 0.5);
+            border-radius: 10px;
+            box-shadow: 1px 3px 3px gray;
+        }
+
+        .login-box > .user_id {
+            margin-bottom: 20px;
+        }
+
+        .user_pw, .email {
+            margin-bottom: 20px;
+        }
+
+        .login-box {
+            width: 400px;
+            margin: auto;
+        }
+
+        .btn > button {
+            width: 190px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .logo {
+            width: 200px;
+            margin-left: 250px;
+        }
+
+        .logo:hover {
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+<body>
+<section class="hero is-info">
+    <div class="hero-body">
+        <div class="logo" onclick="window.location.href='/'">
+            <p class="title">
+                All in Run
+            </p>
+            <p class="subtitle">
+                함께 하는 즐거움
+            </p>
+        </div>
+    </div>
+</section>
+
+<div class="section has-text-centered">
+    <h1 class="title">로그인 페이지</h1>
+    <div class="container" style="width:60%">
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="userid">ID</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input type="text" class="input" id="userid" aria-describedby="emailHelp"
+                               placeholder="My ID">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="userpw">PW</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input type="password" class="input" id="userpw" placeholder="My Password">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="control">
+            <a class="button is-info" onclick="sign_in()">
+                로그인
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
