@@ -23,8 +23,8 @@
 
     <script>
         // {% if msg %}
-            //     alert("{{ msg }}")
-            // {% endif %}
+        //     alert("{{ msg }}")
+        // {% endif %}
         function sign_in() {
             $.ajax({
                 type: "POST",
@@ -186,18 +186,25 @@
             display: inline-block;
             margin-left: 5px;
         }
+
+        .logo {
+            width: 200px;
+            margin-left: 250px;
+        }
     </style>
 
 </head>
 <body>
 <section class="hero is-info">
     <div class="hero-body">
-        <p class="title">
-            All in Run
-        </p>
-        <p class="subtitle">
-            함께 하는 즐거움
-        </p>
+        <div class="logo">
+            <p class="title">
+                All in Run
+            </p>
+            <p class="subtitle">
+                함께 하는 즐거움
+            </p>
+        </div>
     </div>
 </section>
 
