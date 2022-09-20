@@ -40,7 +40,7 @@ def writing():
 
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
-    # 로그인
+    # 로그인하는 함수
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
 
@@ -85,34 +85,38 @@ def check_dup():
 
 @app.route('/posting', methods=['POST'])
 def posting():
-    title_receive = request.form['title_give']
-    place_receive = request.form['place_give']
-    content_receive = request.form['content_give']
-    channel_receive = request.form['channel_give']
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
 
-    file = request.files["file_give"]  # 파일 업로드
+        title_receive = request.form["title_give"]
+        place_receive = request.form["place_give"]
+        content_receive = request.form["content_give"]
+        channel_receive = request.form["channel_give"]
+        date_receive = request.form["date_give"]
 
-    extension = file.filename.split('.')[-1]
-
-    today = datetime.now()
-    mytime = today.strftime("%Y-%m-%d-%H-%M-%S")
-
-    filename = f'file-{mytime}'
-
-    save_to = f'static/{filename}.{extension}'  # 파일 업로드
-    file.save(save_to)
-
-    doc = {
-        'title': title_receive,
-        'place': place_receive,
-        'content': content_receive,
-        'channel': channel_receive,
-        'file': f'{filename}.{extension}'
-    }
-
-    db.posts.insert_one(doc)
-
-    return jsonify({'msg': '작성 완료!'})
+        today = datetime.now()
+        time = today.strftime("%Y-%m-%d-%H-%M-%S")
+        doc = {
+            "username": user_info["username"],
+            "title": title_receive,
+            "channel": channel_receive,
+            "place": place_receive,
+            "content": content_receive,
+            "date": date_receive
+        }
+        if 'file_give' in request.files:
+            file = request.files["file_give"]
+            filename = secure_filename(file.filename)
+            extension = filename.split(".")[-1]
+            file_path = f"images/{time}.{extension}"
+            file.save("./static/" + file_path)
+            doc["filepath"] = file_path
+        db.posts.insert_one(doc)
+        return jsonify({"result": "success", 'msg': '포스팅 성공'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 @app.route("/get_posts", methods=['GET'])
 def get_posts():

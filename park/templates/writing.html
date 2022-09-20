@@ -122,6 +122,7 @@
             let place = $('#place').val()
             let comment = $('#content').val()
             let channel = $('#channel').val()
+            let today = new Date().toISOString()
 
             let form_data = new FormData()
 
@@ -130,6 +131,7 @@
             form_data.append("place_give", place)
             form_data.append("content_give", comment)
             form_data.append("channel_give", channel)
+            form_data.append("date_give", today)
 
             $.ajax({
                 type: "POST",
@@ -203,7 +205,5 @@
         <button class="button is-rounded">취소</button>
     </div>
 </div>
-
 </body>
-
 </html>
