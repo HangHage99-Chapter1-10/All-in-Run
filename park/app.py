@@ -40,20 +40,6 @@ def signup():
     msg = request.args.get("msg")
     return render_template('signup.html', msg=msg)
 
-
-@app.route('/detail')
-def detail():
-    msg = request.args.get("msg")
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.users.find_one({"username": payload["id"]})
-        return render_template('detail.html', msg=msg, user_info=user_info)
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
-
 # 글목록 메인 페이지
 @app.route('/main')
 def main():
@@ -106,6 +92,20 @@ def place():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
+# 글 세부 페이지
+@app.route('/detail')
+def detail():
+    msg = request.args.get("msg")
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
+        return render_template('detail.html', msg=msg, user_info=user_info)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
 # 글쓰기 페이지
 @app.route('/writing')
 def writing():
@@ -120,6 +120,7 @@ def writing():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
+# 프로필 페이지
 @app.route('/user/<username>')
 def user(username):
     # 각 사용자의 프로필과 글을 모아볼 수 있는 공간
@@ -132,6 +133,8 @@ def user(username):
         return render_template('user.html', user_info=user_info, status=status)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
+#--------------------페이지 구분------------------------
 
 # 로그인 API
 @app.route('/sign_in', methods=['POST'])
@@ -178,7 +181,7 @@ def check_dup():
     exists = bool(db.users.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
-
+# 글쓰기 포스팅
 @app.route('/posting', methods=['POST'])
 def posting():
     token_receive = request.cookies.get('mytoken')
