@@ -195,16 +195,24 @@ def posting():
         channel_receive = request.form["channel_give"]
         date_receive = request.form["date_give"]
 
+        post_list = list(db.posts.find({}, {'_id': False}))
+        no = len(post_list) + 1
+
+        comments = {'name':[], 'comment':[]}
+
         today = datetime.now()
         time = today.strftime("%Y-%m-%d-%H-%M-%S")
+
         doc = {
+            "no": no,
             "username": user_info["username"],
             "profile_pic": user_info["profile_pic_real"],
             "title": title_receive,
             "channel": channel_receive,
             "place": place_receive,
             "content": content_receive,
-            "date": date_receive
+            "date": date_receive,
+            "comment_list": comments
         }
         if 'file_give' in request.files:
             file = request.files["file_give"]

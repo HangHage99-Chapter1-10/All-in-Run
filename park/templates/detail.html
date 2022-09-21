@@ -124,35 +124,38 @@
     <script>
         $(document).ready(function () {
             bsCustomFileInput.init()
-            listing()
+            listing(postnum)
             comment()
         })
 
         urlSearch = new URLSearchParams(location.search);
-        userId = urlSearch.get('username')
-        console.log(typeof(userId))
-        console.log(userId)
+        postnum = parseInt(urlSearch.get('post-num'));
+        console.log(typeof (postnum))
+        console.log(postnum)
 
-        function listing() {
+        function listing(n) {
             $.ajax({
                 type: "GET",
                 url: "/writing_list",
                 data: {},
                 success: function (response) {
-                    let writings = response['all_writing']
-                    for (let i = 0; i < writings.length; i++) {
-                        let writes = writings[i]
-                        // if (writes["_id"].includes(userId)){
-                        let temp_html = `<div class="wrap">
+                    let posts = response['all_writing']
+                    let file = posts[n - 1]['filepath']
+                    let title = posts[n - 1]['title']
+                    let channel = posts[n - 1]['channel']
+                    let place = posts[n - 1]['place']
+                    let content = posts[n - 1]['content']
+
+                    let temp_html = `<div class="wrap">
                                             <img class="fit-picture"
-                                                 src="/static/${writes["filepath"]}">
+                                                 src="/static/${file}">
 
                                             <div class="form-group">
 
                                                 <div class="rows">
                                                     <tr>
-                                                        <h1>${writes["title"]}</h1>
-                                                        <h2>${writes["channel"]}</h2>
+                                                        <h1>${title}</h1>
+                                                        <h2>${channel}</h2>
                                                     </tr>
                                                 </div>
                                                 <div>
@@ -163,21 +166,17 @@
                                                         <tr>
                                                             <td>ID</td>
                                                             <td></td>
-                                                            <td>${writes["place"]}</td>
+                                                            <td>${place}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>${writes["content"]}</td>
+                                                            <td>${content}</td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>`
-                        $('#writing-box').append(temp_html)
-                        // }
-
-
-                    }
+                    $('#writing-box').append(temp_html)
                 }
             })
         }
