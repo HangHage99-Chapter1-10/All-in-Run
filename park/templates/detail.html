@@ -125,7 +125,7 @@
         $(document).ready(function () {
             bsCustomFileInput.init()
             listing(postnum)
-            comment()
+            comment_listing(postnum)
         })
 
         urlSearch = new URLSearchParams(location.search);
@@ -139,7 +139,7 @@
                 url: "/writing_list",
                 data: {},
                 success: function (response) {
-                    let posts = response['all_writing']
+                    let posts = response['writing_list']
                     let file = posts[n - 1]['filepath']
                     let title = posts[n - 1]['title']
                     let channel = posts[n - 1]['channel']
@@ -181,18 +181,20 @@
             })
         }
 
-        function comment() {
+        function comment_listing(n) {
             $.ajax({
                 type: "GET",
-                url: "/comment_list",
+                url: "/writing_list",
                 data: {},
                 success: function (response) {
-                    let comments = response['all_comment']
-                    for (let i = 0; i < comments.length; i++) {
-                        let comment = comments[i]['comment']
+                    let rows = response['writing_list']
+                    let commentList_len = rows[n - 1]['comment_list']['name'].length
+                    for (i = 0; i < commentList_len; i++) {
+                        let username = rows[n - 1]['comment_list']['name'][i]
+                        let comment = rows[n - 1]['comment_list']['comment'][i]
 
                         let temp_html = `<tr>
-                                            <td>ID 123</td>
+                                            <td>${username}</td>
                                             <td></td>
                                             <td>${comment}</td>
                                         </tr>`
@@ -202,18 +204,21 @@
             })
         }
 
-        function save_comment() {
+
+        function comment_posting() {
+            let no = parseInt(urlSearch.get('post-num'))
+            let name = '{{user_info.username}}';
             let comment = $('#comment').val()
 
             $.ajax({
-                type: "POST",
-                url: "/comment_list",
-                data: {comment_give: comment},
+                type: 'POST',
+                url: '/detail/comment-post',
+                data: {no_give: no, name_give: name, comment_give: comment},
                 success: function (response) {
-                    alert(response["msg"])
+                    alert(response['msg'])
                     window.location.reload()
                 }
-            });
+            })
         }
 
 
@@ -270,7 +275,7 @@
     <p>댓글 달기</p>
     <div class="rows">
         <input id="comment" class="form-control" type="text" placeholder="댓글을 남겨보세요!">
-        <button onclick="save_comment()" type="button" class="btn btn-outline-secondary">등록</button>
+        <button onclick="comment_posting()" type="button" class="btn btn-outline-secondary">등록</button>
     </div>
     <div class="reviews">
         <table class="table">

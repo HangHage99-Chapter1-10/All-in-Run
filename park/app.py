@@ -227,27 +227,47 @@ def posting():
         return redirect(url_for("home"))
 
 
-@app.route("/comment_list", methods=["POST"])
-def save_comment():
+@app.route("/detail/comment-post", methods=["POST"])
+def comment_post():
+    no_receive = request.form['no_give']
+    no = int(no_receive)
+
+    comments = {'name':[], 'comment':[]}
+    comment_list = list(db.posts.find({'no': no}, {'_id': False}))
+    for i in comment_list:
+        name = i['comment_list']['name']
+        comment = i['comment_list']['comment']
+        comments['name'] = name
+        comments['comment'] = comment
+
+    name_receive = request.form['name_give']
     comment_receive = request.form['comment_give']
 
-    doc = {
-              'comment': comment_receive
-    }
-    db.comment.insert_one(doc)
-    return jsonify({})
+    if comment_receive == '':
+
+        return  jsonify({'msg': '작성해주세요!'})
+
+    else:
+        add_comment(comments, name_receive, comment_receive)
+
+        db.posts.update_one({'no': no}, {'$set': {'comment_list': comments}})
+
+        return jsonify({'msg': '댓글 포스팅 완료!'})
+
+def add_comment(dic, name, comment):
+    dic['name'].append(name)
+    dic['comment'].append(comment)
+
+def rm_comment(dic, name, comment):
+    dic['name'].remove(name)
+    dic['comment'].remove(comment)
 
 
 @app.route("/writing_list", methods=["GET"])
 def give_writing():
-    writings = list(db.posts.find({}, {'_id': False}))
-    return jsonify({'all_writing': writings})
+    posts = list(db.posts.find({}, {'_id': False}))
+    return jsonify({'writing_list': posts})
 
-
-@app.route("/comment_list", methods=["GET"])
-def give_comment():
-    comments = list(db.comment.find({}, {'_id': False}))
-    return jsonify({'all_comment': comments})
 
 @app.route("/get_posts", methods=['GET'])
 def get_posts():
@@ -287,7 +307,5 @@ def save_img():
         return redirect(url_for("home"))
 
 if __name__ == '__main__':
-    # posts = db.posts.find({"channel":"매칭"},{"_id":False})
-    # for i in posts:
-    #     print(i)
+
     app.run('0.0.0.0', port=5000, debug=True)
