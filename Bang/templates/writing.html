@@ -48,7 +48,7 @@
         .form-group {
             max-width: 520px;
             width: 95%;
-            height: 570px;
+            height: 580px;
 
             margin: 40px 0px 0px 0px;
             border: 1px solid rgba(100, 100, 100, 0.5);
@@ -59,12 +59,12 @@
         }
 
         .mytitle {
-            width: 320px;
+            width: 300px;
             margin: 20px 15px 0px 0px;
         }
 
         .channel {
-            width: 115px;
+            width: 135px;
             margin-top: 20px;
         }
 
@@ -117,7 +117,7 @@
         }
 
         function posting() {
-            let mytitle = $('#mytitle').val()
+            let title = $('#title').val()
             let place = $('#place').val()
             let content = $('#content').val()
             let channel = $('#channel').val()
@@ -126,7 +126,7 @@
             let form_data = new FormData()
 
             form_data.append("file_give", file)
-            form_data.append("mytitle_give", mytitle)
+            form_data.append("title_give", title)
             form_data.append("place_give", place)
             form_data.append("content_give", content)
             form_data.append("channel_give", channel)
@@ -140,7 +140,7 @@
                 processData: false,
                 success: function (response) {
                     alert(response["msg"])
-                    window.location.reload()
+                    window.location.href="/detail"
                 }
             });
         }
@@ -166,13 +166,13 @@
         <h1 class="writing">글 작성</h1>
         <div class="rows">
             <div class="mytitle">
-                <input type="email" class="form-control" id="mytitle" placeholder="제목">
+                <input type="email" class="form-control" id="title" placeholder="제목을 입력해주세요">
             </div>
             <div class="channel">
                 <select class="form-control" id="channel">
-                    <option>매칭</option>
-                    <option>아이템</option>
-                    <option>장소</option>
+                    <option>함께 달리기</option>
+                    <option>애착아이템</option>
+                    <option>나만의 장소</option>
                 </select>
             </div>
         </div>
@@ -185,13 +185,13 @@
         <i class="fas fa-upload"></i>
       </span>
       <span class="file-label">
-        첨부 파일
+        사진 첨부
       </span>
     </span>
                 </label>
             </div>
             <div class="place">
-                <input type="email" class="form-control" id="place" placeholder="장소">
+                <input type="email" class="form-control" id="place" placeholder="장소를 적어주세요">
             </div>
         </div>
 

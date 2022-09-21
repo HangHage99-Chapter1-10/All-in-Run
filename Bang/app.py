@@ -8,12 +8,18 @@ db = client.dball_in_run
 from datetime import datetime
 
 @app.route('/')
-def home():
-    return render_template('index.html')
+def writing():
+    msg = request.args.get("msg")
+    return render_template('writing.html', msg=msg)
+
+@app.route('/detail')
+def detail():
+    msg = request.args.get("msg")
+    return render_template('detail.html', msg=msg)
 
 @app.route("/writing_list", methods=["POST"])
 def save_writing():
-    mytitle_receive = request.form['mytitle_give']
+    title_receive = request.form['title_give']
     place_receive = request.form['place_give']
     content_receive = request.form['content_give']
     channel_receive = request.form['channel_give']
@@ -31,7 +37,7 @@ def save_writing():
     file.save(save_to)
 
     doc = {
-        'mytitle':mytitle_receive,
+        'title':title_receive,
         'place':place_receive,
         'content':content_receive,
         'channel':channel_receive,
@@ -42,9 +48,27 @@ def save_writing():
 
     return jsonify({'msg':'작성 완료!'})
 
+@app.route("/comment_list", methods=["POST"])
+def save_comment():
+    comment_receive = request.form['comment_give']
+
+    doc = {
+              'comment': comment_receive
+    }
+
+    db.comment.insert_one(doc)
+
+    return jsonify({})
+
 @app.route("/writing_list", methods=["GET"])
 def give_writing():
-    return jsonify({'msg':'GET 연결 완료!'})
+    writings = list(db.writing.find({}, {'_id': False}))
+    return jsonify({'all_writing': writings})
+
+@app.route("/comment_list", methods=["GET"])
+def give_comment():
+    comments = list(db.comment.find({}, {'_id': False}))
+    return jsonify({'all_comment': comments})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
