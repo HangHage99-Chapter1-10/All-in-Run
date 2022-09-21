@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <title>All in Run | 글 쓰기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <!-- 파일 업로드 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+        .wrap {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-group {
+            max-width: 520px;
+            width: 95%;
+            height: 570px;
+
+            margin: 40px 0px 0px 0px;
+            border: 1px solid rgba(100, 100, 100, 0.5);
+            border-radius: 5px;
+            padding: 30px;
+            box-shadow: 1px 3px 3px gray;
+
+        }
+
+        .mytitle {
+            width: 320px;
+            margin: 20px 15px 0px 0px;
+        }
+
+        .channel {
+            width: 115px;
+            margin-top: 20px;
+        }
+
+        .content {
+            margin-top: 20px;
+        }
+
+        .place {
+            width: 320px;
+            margin-top: 20px;
+        }
+
+        .rows {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .file {
+            margin: 20px 15px 0px 0px;
+        }
+
+        .form-group > button {
+            width: 100px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .writing {
+            font-size: 40px;
+        }
+
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            bsCustomFileInput.init()
+            listing()
+        })
+
+        function listing() {
+            $.ajax({
+                type: "GET",
+                url: "/writing_list",
+                data: {},
+                success: function (response) {
+                    // alert(response['msg'])
+                }
+            })
+        }
+
+        function posting() {
+            let file = $('#file')[0].files[0]
+            let title = $('#mytitle').val()
+            let place = $('#place').val()
+            let comment = $('#content').val()
+            let channel = $('#channel').val()
+            let today = new Date().toISOString()
+
+            let form_data = new FormData()
+
+            form_data.append("file_give", file)
+            form_data.append("title_give", title)
+            form_data.append("place_give", place)
+            form_data.append("content_give", comment)
+            form_data.append("channel_give", channel)
+            form_data.append("date_give", today)
+
+            $.ajax({
+                type: "POST",
+                url: "/posting",
+                data: form_data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    console.log(response)
+                    alert(response["msg"])
+                    window.location.href='/main'
+                }
+            });
+        }
+
+    </script>
+
+</head>
+
+<body>
+<section class="hero is-info">
+    <div class="hero-body">
+        <p class="title">
+            All in Run
+        </p>
+        <p class="subtitle">
+            함께 하는 즐거움
+        </p>
+    </div>
+</section>
+<div class="wrap">
+
+    <div class="form-group">
+        <h1 class="writing">글 작성</h1>
+        <div class="rows">
+            <div class="mytitle">
+                <input type="email" class="form-control" id="mytitle" placeholder="제목">
+            </div>
+            <div class="channel">
+                <select class="form-control" id="channel">
+                    <option>매칭</option>
+                    <option>아이템</option>
+                    <option>장소</option>
+                </select>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="file">
+                <label class="file-label">
+                    <input class="file-input" type="file" id="file">
+                    <span class="file-cta">
+      <span class="file-icon">
+        <i class="fas fa-upload"></i>
+      </span>
+      <span class="file-label">
+        첨부 파일
+      </span>
+    </span>
+                </label>
+            </div>
+            <div class="place">
+                <input type="email" class="form-control" id="place" placeholder="장소">
+            </div>
+        </div>
+
+        <div class="content">
+            <textarea class="textarea" id="content" placeholder="내용을 적어주세요" rows="10"></textarea>
+        </div>
+        <button onclick="posting()" class="button is-link is-light">작성 완료</button>
+        <button class="button is-rounded" onclick="window.location.href='/main'">취소</button>
+    </div>
+</div>
+</body>
+</html>
