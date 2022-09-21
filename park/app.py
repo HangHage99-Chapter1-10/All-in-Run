@@ -40,6 +40,20 @@ def signup():
     msg = request.args.get("msg")
     return render_template('signup.html', msg=msg)
 
+
+@app.route('/detail')
+def detail():
+    msg = request.args.get("msg")
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
+        return render_template('detail.html', msg=msg, user_info=user_info)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
 # 글목록 메인 페이지
 @app.route('/main')
 def main():
@@ -200,6 +214,31 @@ def posting():
         return jsonify({"result": "success", 'msg': '포스팅 성공'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
+
+@app.route("/comment_list", methods=["POST"])
+def save_comment():
+    comment_receive = request.form['comment_give']
+
+    doc = {
+              'comment': comment_receive
+    }
+
+    db.comment.insert_one(doc)
+
+    return jsonify({})
+
+
+@app.route("/writing_list", methods=["GET"])
+def give_writing():
+    writings = list(db.posts.find({}, {'_id': False}))
+    return jsonify({'all_writing': writings})
+
+
+@app.route("/comment_list", methods=["GET"])
+def give_comment():
+    comments = list(db.comment.find({}, {'_id': False}))
+    return jsonify({'all_comment': comments})
 
 @app.route("/get_posts", methods=['GET'])
 def get_posts():
