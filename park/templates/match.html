@@ -37,19 +37,6 @@
         }
 
 
-        .btn > button {
-            width: 190px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-left: 5px;
-        }
-
-        .button {
-            float: right;
-            margin: 50px auto;
-            padding: 20px;
-        }
-
         * {
             font-family: 'Jua', sans-serif;
         }
@@ -59,16 +46,27 @@
         }
 
         .menubtn {
-            width: 600px;
+            width: 900px;
             position: absolute;
             top: 10px;
-            right: 450px;
+            right: 100px;
         }
 
         .menubtn p {
-            display: inline-block;
-            margin-top: 10px;
-            margin-right: 20px;
+            right: 292px;
+            top: 9px;
+            position: absolute;
+        }
+
+        .mycards {
+            max-width: 800px;
+            width: 95%;
+            height: 100%;
+            margin: 10px auto;
+            border: 1px solid rgba(100, 100, 100, 0.5);
+            border-radius: 10px;
+            box-shadow: 1px 3px 3px gray;
+            padding: 20px 20px 20px 20px;
         }
 
 
@@ -81,6 +79,21 @@
             cursor: pointer;
         }
 
+        .media-left {
+            display: inline-block;
+        }
+
+        #log {
+            border-color: white;
+            position: absolute;
+            right: 170px;
+            top: 0px;
+        }
+
+        .title2 {
+            width: 100px;
+            margin: 30px auto;
+        }
 
     </style>
     <script>
@@ -132,7 +145,7 @@
                                         <td><h5>${post["title"]}</h5></td>
                                         <td><a href="/detail?post-num=${post["no"]}"><img src="/static/${post["filepath"]}"alt="placeholder" style="width: 300px; height: 200px;"></a></td>
                                                  <td>${post["content"]}</td>
-                                        <td><a href="/detail?post-num=${post["no"]}">${post["username"]}<img src="/static/${post["profile_pic"]}" style="width: 50px; height: 50px;"></a></td>
+                                        <td><a href="/detail?post-num=${post["no"]}">${post["username"]}<img class="is-rounded" src="/static/${post["profile_pic"]}" style="width: 50px; height: 50px;"></a></td>
                                         <td>${time_before}</td>
                                     </tr>`
                                 $('#board-list').append(temp_html)
@@ -188,8 +201,8 @@
         </nav>
     </div>
 </section>
-<div>
-    <button class="button is-primary is-rounded" onclick="window.location.href='/writing'">Writing</button>
+<div class="title2">
+    <span class="tag is-info is-light" style="font-size: 30px">함께 달리기</span>
 </div>
 <div class="mycards">
     <table class="table">
@@ -207,6 +220,9 @@
         <tbody class="board-list" id="board-list">
         </tbody>
     </table>
+    <div>
+        <button class="button is-primary is-rounded" onclick="window.location.href='/writing'">Writing</button>
+    </div>
 </div>
 </body>
 </html>
