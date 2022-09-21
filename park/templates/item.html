@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <!-- Webpage Title -->
+    <title>Log In | SWEETER</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <style>
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+
+        .board {
+            /*max-width: 1100px;*/
+            width: 100%;
+            height: 100%;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid rgba(100, 100, 100, 0.5);
+        }
+
+
+        .btn > button {
+            width: 190px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .button {
+            float: right;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+        .hero-body {
+            position: relative;
+        }
+
+        .menubtn {
+            width: 600px;
+            position: absolute;
+            top: 10px;
+            right: 450px;
+        }
+
+        .menubtn p {
+            display: inline-block;
+            margin-top: 10px;
+            margin-right: 20px;
+        }
+
+
+        .logo {
+            width: 200px;
+            margin-left: 250px;
+        }
+
+        .logo:hover {
+            cursor: pointer;
+        }
+
+
+    </style>
+    <script>
+        $(document).ready(function () {
+            get_posts()
+        })
+
+        function sign_out() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+
+        function time2str(date) {
+            let today = new Date()
+            let time = (today - date) / 1000 / 60  // 분
+
+            if (time < 60) {
+                return parseInt(time) + "분 전"
+            }
+            time = time / 60  // 시간
+            if (time < 24) {
+                return parseInt(time) + "시간 전"
+            }
+            time = time / 24
+            if (time < 7) {
+                return parseInt(time) + "일 전"
+            }
+            return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`
+        }
+
+        function get_posts() {
+            $("#board-list").empty()
+            // $("#post-box").empty()
+            $.ajax({
+                type: "GET",
+                url: "/get_posts",
+                data: {},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        let posts = response["posts"]
+                        for (let i = 0; i < posts.length; i++) {
+                            let post = posts[i]
+                            if (post["channel"].includes("아이템")) {
+                                let time_post = new Date(post["date"])
+                                let time_before = time2str(time_post)
+                                let html_temp2 = `<div class="column">
+                                                                <div class="card">
+                                                                    <div class="card-image">
+                                                                        <figure class="image is-4by3">
+                                                                            <img src="/static/${post['filepath']}" alt="Placeholder image">
+                                                                        </figure>
+                                                                    </div>
+                                                                    <div class="card-content">
+                                                                        <div class="media">
+                                                                            <div class="media-left">
+                                                                                <figure class="image is-48x48">
+                                                                                    <img src="../static/logo.png" alt="Placeholder image">
+                                                                                </figure>
+                                                                            </div>
+                                                                            <div class="media-content">
+                                                                                <p class="title is-4">${post['title']}</p>
+                                                                                <p class="subtitle is-6">@${post['username']}</p>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="content">
+                                                                            ${post['content']}
+                                                                            <br>
+                                                                            <time datetime="2016-1-1">${time_before}</time>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>`
+                                $("#board-list").append(html_temp2)
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+
+    </script>
+</head>
+<body>
+<section class="hero is-info">
+    <div class="hero-body">
+        <div class="logo" onclick="window.location.href='/'">
+            <p class="title">
+                All in Run
+            </p>
+            <p class="subtitle">
+                함께 하는 즐거움
+            </p>
+        </div>
+        <nav class="menubtn">
+            <button class="button is-primary is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold" id="matching"
+                    onclick="window.location.href='/match'">함께 달리기
+            </button>
+            <button class="button is-link is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold
+            " id="items" onclick="window.location.href='/item'">애착아이템
+            </button>
+            <button class="button is-info is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold
+            " id="location" onclick="window.location.href='/place'">나만의 장소
+            </button>
+
+            <p>{{user_info.username}}님</p>
+            <button id="log" class="button is-danger is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold
+            " onclick="sign_out()">로그아웃
+            </button>
+        </nav>
+    </div>
+</section>
+<div>
+    <button class="button is-primary is-rounded" onclick="window.location.href='/writing'">Writing</button>
+</div>
+<section class="board">
+    <div class="columns mx-4 is-vcentered" id="board-list">
+        <div class="column">
+            <div class="card">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-left">
+                            <figure class="image is-48x48">
+                                <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <p class="title is-4">John Smith</p>
+                            <p class="subtitle is-6">@johnsmith</p>
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                        <a href="#">#css</a> <a href="#">#responsive</a>
+                        <br>
+                        <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="card">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-left">
+                            <figure class="image is-48x48">
+                                <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <p class="title is-4">John Smith</p>
+                            <p class="subtitle is-6">@johnsmith</p>
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                        <a href="#">#css</a> <a href="#">#responsive</a>
+                        <br>
+                        <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="card">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-left">
+                            <figure class="image is-48x48">
+                                <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <p class="title is-4">John Smith</p>
+                            <p class="subtitle is-6">@johnsmith</p>
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                        <a href="#">#css</a> <a href="#">#responsive</a>
+                        <br>
+                        <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+</body>
+</html>

@@ -42,7 +42,7 @@ def login():
 @app.route('/register')
 def register():
     msg = request.args.get("msg")
-    return render_template('register.html', msg=msg)
+    return render_template('signup.html', msg=msg)
 
 
 @app.route('/sign_up/save', methods=['POST'])

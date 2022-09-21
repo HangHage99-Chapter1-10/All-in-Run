@@ -50,11 +50,50 @@
             padding: 20px;
         }
 
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+        .hero-body {
+            position: relative;
+        }
+
+        .menubtn {
+            width: 600px;
+            position: absolute;
+            top: 10px;
+            right: 450px;
+        }
+
+        .menubtn p {
+            display: inline-block;
+            margin-top: 10px;
+            margin-right: 20px;
+        }
+
+
+
+        .logo {
+            width: 200px;
+            margin-left: 250px;
+        }
+
+        .logo:hover {
+            cursor: pointer;
+        }
+
+
     </style>
     <script>
         $(document).ready(function () {
             get_posts()
         })
+
+        function sign_out() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
 
         function time2str(date) {
             let today = new Date()
@@ -130,12 +169,33 @@
 <body>
 <section class="hero is-info">
     <div class="hero-body">
-        <p class="title">
-            All in Run
-        </p>
-        <p class="subtitle">
-            함께 하는 즐거움
-        </p>
+        <div class="logo" onclick="window.location.href='/'">
+            <p class="title">
+                All in Run
+            </p>
+            <p class="subtitle">
+                함께 하는 즐거움
+            </p>
+        </div>
+        <nav class="menubtn">
+            <button class="button is-primary is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold" id="matching">함께 달리기
+            </button>
+            <button class="button is-link is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold
+            " id="items">애착아이템
+            </button>
+            <button class="button is-info is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold
+            " id="location">나만의 장소
+            </button>
+
+            <p>{{user_info.username}}님</p>
+            <button id="log" class="button is-danger is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold
+            " onclick="sign_out()">로그아웃
+            </button>
+        </nav>
     </div>
 </section>
 <div>
