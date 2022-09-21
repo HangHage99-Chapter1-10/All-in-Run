@@ -138,7 +138,7 @@
                                                                         <div class="media">
                                                                             <div class="media-left">
                                                                                 <figure class="image is-48x48">
-                                                                                    <img src="../static/logo.png" alt="Placeholder image">
+                                                                                    <img src="/static/${post['profile_pic']}" alt="Placeholder image">
                                                                                 </figure>
                                                                             </div>
                                                                             <div class="media-content">
@@ -179,18 +179,27 @@
         </div>
         <nav class="menubtn">
             <button class="button is-primary is-inverted"
-                    style="background-color: transparent; color: white; font-weight: bold" id="matching"
+                    style="background-color: transparent; color: white; font-weight: bold"
+                    onclick="window.location.href='/main'">글 목록
+            </button>
+            <button class="button is-primary is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold"
                     onclick="window.location.href='/match'">함께 달리기
             </button>
             <button class="button is-link is-inverted"
                     style="background-color: transparent; color: white; font-weight: bold
-            " id="items" onclick="window.location.href='/item'">애착아이템
+            " onclick="window.location.href='/item'">애착아이템
             </button>
             <button class="button is-info is-inverted"
                     style="background-color: transparent; color: white; font-weight: bold
-            " id="location" onclick="window.location.href='/place'">나만의 장소
+            " onclick="window.location.href='/place'">나만의 장소
             </button>
 
+            <figure class="media-left" style="align-self: center">
+                <a class="image is-32x32" href="/user/{{ user_info.username }}">
+                    <img class="is-rounded" src="{{ url_for('static', filename=user_info.profile_pic_real) }}">
+                </a>
+            </figure>
             <p>{{user_info.username}}님</p>
             <button id="log" class="button is-danger is-inverted"
                     style="background-color: transparent; color: white; font-weight: bold
