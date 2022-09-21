@@ -22,11 +22,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <style>
-
-        body {
-            height: 850px;
-        }
-
         * {
             font-family: 'Jua', sans-serif;
         }
@@ -35,24 +30,12 @@
         .board {
             /*max-width: 1100px;*/
             width: 100%;
-            height: 600px;
-            margin: 15px auto;
+            height: 100%;
+            margin: 50px auto;
             padding: 20px;
             border: 1px solid rgba(100, 100, 100, 0.5);
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
         }
 
-
-        * {
-            font-family: 'Jua', sans-serif;
-        }
-
-        .hero-body {
-            position: relative;
-        }
 
         .menubtn {
             width: 900px;
@@ -62,10 +45,24 @@
         }
 
         .menubtn p {
-            margin-right: 20px;
+            right: 292px;
             top: 9px;
-            right: 272px;
             position: absolute;
+        }
+
+
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+        #log {
+            border-color: white;
+            position: absolute;
+            right: 170px;
+        }
+
+        .hero-body {
+            position: relative;
         }
 
 
@@ -82,21 +79,20 @@
             display: inline-block;
         }
 
-        #log {
-            border-color: white;
-            position: absolute;
-            right: 170px;
+        .mycards {
+            max-width: 800px;
+            width: 95%;
+            height: 100%;
+            margin: 10px auto;
+            border: 1px solid rgba(100, 100, 100, 0.5);
+            border-radius: 10px;
+            box-shadow: 1px 3px 3px gray;
+            padding: 20px 20px 20px 20px;
         }
-
-        .write-box {
-            position: relative;
+        .title2{
+            width: 100px;
+            margin: 30px auto;
         }
-
-        .btn {
-            position: absolute;
-            right: 50px;
-        }
-
 
     </style>
     <script>
@@ -143,36 +139,15 @@
                             if (post["channel"].includes("아이템")) {
                                 let time_post = new Date(post["date"])
                                 let time_before = time2str(time_post)
-                                let html_temp2 = `<div class="column">
-                                                                <div class="card">
-                                                                    <div class="card-image">
-                                                                        <figure class="image is-4by3">
-                                                                            <img src="/static/${post['filepath']}" alt="Placeholder image">
-                                                                        </figure>
-                                                                    </div>
-                                                                    <div class="card-content">
-                                                                        <div class="media">
-                                                                            <div class="media-left">
-                                                                                <figure class="image is-48x48">
-                                                                                    <img src="/static/${post['profile_pic']}" alt="Placeholder image">
-                                                                                </figure>
-                                                                            </div>
-                                                                            <div class="media-content">
-                                                                                <p class="title is-4">${post['title']}</p>
-                                                                                <p class="subtitle is-6">@${post['username']}</p>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="content">
-                                                                            ${post['content']}
-                                                                            <br>
-                                                                            <time datetime="2016-1-1">${time_before}</time>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-`
-                                $("#board-list").append(html_temp2)
+                                let temp_html = `<tr class="board">
+                                        <th scope="row">${post["channel"]}</th>
+                                        <td><h5>${post["title"]}</h5></td>
+                                        <td><a href="/detail?username=${post["_id"]}"><img src="/static/${post["filepath"]}"alt="placeholder" style="width: 300px; height: 200px;"></a></td>
+                                                 <td>${post["content"]}</td>
+                                        <td><a href="/detail?username=${post["_id"]}">${post["username"]}<img src="/static/${post["profile_pic"]}" style="width: 50px; height: 50px;"></a></td>
+                                        <td>${time_before}</td>
+                                    </tr>`
+                                $('#board-list').append(temp_html)
                             }
                         }
                     }
@@ -225,105 +200,28 @@
         </nav>
     </div>
 </section>
-
-<section class="board">
-    <div class="columns mx-4 is-vcentered" id="board-list">
-        <div class="column">
-            <div class="card">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <div class="media">
-                        <div class="media-left">
-                            <figure class="image is-48x48">
-                                <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image"
-                                     id="img">
-                            </figure>
-                        </div>
-                        <div class="media-content">
-                            <p class="title is-4">John Smith</p>
-                            <p class="subtitle is-6">@johnsmith</p>
-                        </div>
-                    </div>
-
-                    <div class="content">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                        <a href="#">#css</a> <a href="#">#responsive</a>
-                        <br>
-                        <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="column">
-            <div class="card">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <div class="media">
-                        <div class="media-left">
-                            <figure class="image is-48x48">
-                                <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                            </figure>
-                        </div>
-                        <div class="media-content">
-                            <p class="title is-4">John Smith</p>
-                            <p class="subtitle is-6">@johnsmith</p>
-                        </div>
-                    </div>
-
-                    <div class="content">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                        <a href="#">#css</a> <a href="#">#responsive</a>
-                        <br>
-                        <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="column">
-            <div class="card">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <div class="media">
-                        <div class="media-left">
-                            <figure class="image is-48x48">
-                                <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                            </figure>
-                        </div>
-                        <div class="media-content">
-                            <p class="title is-4">John Smith</p>
-                            <p class="subtitle is-6">@johnsmith</p>
-                        </div>
-                    </div>
-
-                    <div class="content">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                        <a href="#">#css</a> <a href="#">#responsive</a>
-                        <br>
-                        <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<div class="write-box">
-    <button class="button is-primary is-rounded btn" onclick="window.location.href='/writing'">Writing</button>
+<div class="title2">
+<span class="tag is-info is-light" style="font-size: 30px">애착아이템</span>
 </div>
+<div class="mycards">
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">카테고리</th>
+            <th scope="col">제목</th>
+            <th scope="col">장소 이미지</th>
+            <th scope="col">내용</th>
+            <th scope="col">글쓴이</th>
+            <th scope="col">작성 시간</th>
+        </tr>
+        </thead>
 
+        <tbody class="board-list" id="board-list">
+        </tbody>
+    </table>
+    <div>
+        <button class="button is-primary is-rounded" onclick="window.location.href='/writing'">Writing</button>
+    </div>
+</div>
 </body>
 </html>

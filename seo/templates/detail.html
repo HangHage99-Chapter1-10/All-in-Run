@@ -118,22 +118,18 @@
             margin: 8px 30px 0px auto;
         }
 
+        #log {
+            border-color: white;
+            position: absolute;
+            right: 170px;
+        }
+
+        .media-left {
+            display: inline-block;
+        }
+
         .hero-body {
             position: relative;
-        }
-
-        .menubtn {
-            width: 900px;
-            position: absolute;
-            top: 10px;
-            right: 100px;
-        }
-
-        .menubtn p {
-            margin-right: 20px;
-            top: 9px;
-            right: 272px;
-            position: absolute;
         }
 
         .logo {
@@ -145,15 +141,19 @@
             cursor: pointer;
         }
 
-        .media-left {
-            display: inline-block;
+        .menubtn {
+            width: 900px;
+            position: absolute;
+            top: 10px;
+            right: 100px;
         }
 
-        #log {
-            border-color: white;
+        .menubtn p {
+            right: 292px;
+            top: 9px;
             position: absolute;
-            right: 170px;
         }
+
 
     </style>
 
@@ -164,6 +164,11 @@
             comment()
         })
 
+        urlSearch = new URLSearchParams(location.search);
+        userId = urlSearch.get('username')
+        console.log(typeof (userId))
+        console.log(userId)
+
         function listing() {
             $.ajax({
                 type: "GET",
@@ -172,22 +177,18 @@
                 success: function (response) {
                     let writings = response['all_writing']
                     for (let i = 0; i < writings.length; i++) {
-                        let title = writings[i]['title']
-                        let content = writings[i]['content']
-                        let place = writings[i]['place']
-                        let channel = writings[i]['channel']
-                        let file = writings[i]['filepath']
-
+                        let writes = writings[i]
+                        // if (writes["_id"].includes(userId)){
                         let temp_html = `<div class="wrap">
                                             <img class="fit-picture"
-                                                 src="/static/${file}">
+                                                 src="/static/${writes["filepath"]}">
 
                                             <div class="form-group">
 
                                                 <div class="rows">
                                                     <tr>
-                                                        <h1>${title}</h1>
-                                                        <h2>${channel}</h2>
+                                                        <h1>${writes["title"]}</h1>
+                                                        <h2>${writes["channel"]}</h2>
                                                     </tr>
                                                 </div>
                                                 <div>
@@ -198,10 +199,10 @@
                                                         <tr>
                                                             <td>ID</td>
                                                             <td></td>
-                                                            <td>${place}</td>
+                                                            <td>${writes["place"]}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>${content}</td>
+                                                            <td>${writes["content"]}</td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -209,6 +210,9 @@
                                             </div>
                                         </div>`
                         $('#writing-box').append(temp_html)
+                        // }
+
+
                     }
                 }
             })
