@@ -41,20 +41,22 @@
         }
 
         .menubtn {
-            width: 600px;
+            width: 900px;
             position: absolute;
             top: 10px;
-            right: 450px;
+            right: 100px;
         }
 
-        .menubtn p {
-            display: inline-block;
-            margin-top: 10px;
-            margin-right: 20px;
+        .menubtn span {
+            right: 292px;
+            top: 9px;
+            position: absolute;
         }
 
-        #reg, #log {
+        #log {
             border-color: white;
+            position: absolute;
+            right: 170px;
         }
 
 
@@ -75,7 +77,6 @@
             width: 95%;
             height: 350px;
             margin: 10px auto;
-            background-color: green;
 
         }
 
@@ -95,6 +96,9 @@
         .box {
             padding: 10px 10px 10px 10px;
         }
+        .media-left{
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -110,18 +114,28 @@
         </div>
         <nav class="menubtn">
             <button class="button is-primary is-inverted"
-                    style="background-color: transparent; color: white; font-weight: bold">함께 달리기
+                    style="background-color: transparent; color: white; font-weight: bold"
+                    onclick="window.location.href='/main'">글 목록
+            </button>
+            <button class="button is-primary is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold"
+                    onclick="window.location.href='/match'">함께 달리기
             </button>
             <button class="button is-link is-inverted"
                     style="background-color: transparent; color: white; font-weight: bold
-            ">애착아이템
+            " onclick="window.location.href='/item'">애착아이템
             </button>
             <button class="button is-info is-inverted"
                     style="background-color: transparent; color: white; font-weight: bold
-            ">나만의 장소
+            " onclick="window.location.href='/place'">나만의 장소
             </button>
 
-            <p>{{user_info.username}}님</p>
+            <figure class="media-left" style="align-self: center">
+                <a class="image is-32x32" href="/user/{{ user_info.username }}">
+                    <img class="is-rounded" src="{{ url_for('static', filename=user_info.profile_pic_real) }}">
+                </a>
+            </figure>
+            <span>{{user_info.username}}님</span>
             <button id="log" class="button is-danger is-inverted"
                     style="background-color: transparent; color: white; font-weight: bold
             " onclick="sign_out()">로그아웃

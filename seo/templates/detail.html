@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <title>All in Run | 글 쓰기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <!-- 파일 업로드 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+        .wrap {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-group {
+            max-width: 520px;
+            width: 95%;
+            height: 470px;
+
+            margin: 40px 0px 0px 10px;
+            border: 1px solid rgba(100, 100, 100, 0.5);
+            border-radius: 5px;
+            padding: 30px;
+            box-shadow: 1px 3px 3px gray;
+
+        }
+
+
+        .rows {
+            display: flex;
+            flex-direction: row;
+        }
+
+
+        .form-group > button {
+            width: 100px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .fit-picture {
+            max-width: 400px;
+            width: 95%;
+            height: 420px;
+            margin-top: 45px;
+        }
+
+        .comment {
+            max-width: 450px;
+            width: 95%;
+            height: 115px;
+            font-size: 19px;
+            margin: 50px auto;
+
+            border: 1px solid rgba(100, 100, 100, 0.5);
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 1px 3px 3px gray;
+        }
+
+        .reviews {
+            margin-top: 50px;
+
+            max-width: 450px;
+            width: 100%;
+
+            font-size: 17px;
+            font-weight: 500;
+
+            margin-right: auto;
+            margin-bottom: 0px;
+
+            border: 1px solid rgba(100, 100, 100, 0.5);
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 1px 3px 3px gray;
+        }
+
+        .rows > h1 {
+            font-size: 26px;
+        }
+
+        .rows > h2 {
+            margin: 8px 30px 0px auto;
+        }
+
+        .hero-body {
+            position: relative;
+        }
+
+        .menubtn {
+            width: 900px;
+            position: absolute;
+            top: 10px;
+            right: 100px;
+        }
+
+        .menubtn p {
+            margin-right: 20px;
+            top: 9px;
+            right: 272px;
+            position: absolute;
+        }
+
+        .logo {
+            width: 200px;
+            margin-left: 250px;
+        }
+
+        .logo:hover {
+            cursor: pointer;
+        }
+
+        .media-left {
+            display: inline-block;
+        }
+
+        #log {
+            border-color: white;
+            position: absolute;
+            right: 170px;
+        }
+
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            bsCustomFileInput.init()
+            listing()
+            comment()
+        })
+
+        function listing() {
+            $.ajax({
+                type: "GET",
+                url: "/writing_list",
+                data: {},
+                success: function (response) {
+                    let writings = response['all_writing']
+                    for (let i = 0; i < writings.length; i++) {
+                        let title = writings[i]['title']
+                        let content = writings[i]['content']
+                        let place = writings[i]['place']
+                        let channel = writings[i]['channel']
+                        let file = writings[i]['filepath']
+
+                        let temp_html = `<div class="wrap">
+                                            <img class="fit-picture"
+                                                 src="/static/${file}">
+
+                                            <div class="form-group">
+
+                                                <div class="rows">
+                                                    <tr>
+                                                        <h1>${title}</h1>
+                                                        <h2>${channel}</h2>
+                                                    </tr>
+                                                </div>
+                                                <div>
+                                                    <table class="table">
+                                                        <thead>
+                                                        </thead>
+                                                        <tbody id="reviews">
+                                                        <tr>
+                                                            <td>ID</td>
+                                                            <td></td>
+                                                            <td>${place}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>${content}</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>`
+                        $('#writing-box').append(temp_html)
+                    }
+                }
+            })
+        }
+
+        function comment() {
+            $.ajax({
+                type: "GET",
+                url: "/comment_list",
+                data: {},
+                success: function (response) {
+                    let comments = response['all_comment']
+                    for (let i = 0; i < comments.length; i++) {
+                        let comment = comments[i]['comment']
+
+                        let temp_html = `<tr>
+                                            <td>ID 123</td>
+                                            <td></td>
+                                            <td>${comment}</td>
+                                        </tr>`
+                        $('#comment-box').append(temp_html)
+                    }
+                }
+            })
+        }
+
+        function save_comment() {
+            let comment = $('#comment').val()
+
+            $.ajax({
+                type: "POST",
+                url: "/comment_list",
+                data: {comment_give: comment},
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload()
+                }
+            });
+        }
+
+
+    </script>
+
+</head>
+
+<body>
+<section class="hero is-info">
+    <div class="hero-body">
+        <div class="logo" onclick="window.location.href='/'">
+            <p class="title">
+                All in Run
+            </p>
+            <p class="subtitle">
+                함께 하는 즐거움
+            </p>
+        </div>
+        <nav class="menubtn">
+            <button class="button is-primary is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold"
+                    onclick="window.location.href='/main'">글 목록
+            </button>
+            <button class="button is-primary is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold"
+                    onclick="window.location.href='/match'">함께 달리기
+            </button>
+            <button class="button is-link is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold
+            " onclick="window.location.href='/item'">애착아이템
+            </button>
+            <button class="button is-info is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold
+            " onclick="window.location.href='/place'">나만의 장소
+            </button>
+
+            <figure class="media-left" style="align-self: center">
+                <a class="image is-32x32" href="/user/{{ user_info.username }}">
+                    <img class="is-rounded" src="{{ url_for('static', filename=user_info.profile_pic_real) }}">
+                </a>
+            </figure>
+            <p>{{user_info.username}}님</p>
+            <button id="log" class="button is-danger is-inverted"
+                    style="background-color: transparent; color: white; font-weight: bold
+            " onclick="sign_out()">로그아웃
+            </button>
+        </nav>
+    </div>
+</section>
+<div id="writing-box">
+
+</div>
+<div class="comment">
+    <p>댓글 달기</p>
+    <div class="rows">
+        <input id="comment" class="form-control" type="text" placeholder="댓글을 남겨보세요!">
+        <button onclick="save_comment()" type="button" class="btn btn-outline-secondary">등록</button>
+    </div>
+    <div class="reviews">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col"></th>
+                <th scope="col">댓글</th>
+            </tr>
+            </thead>
+            <tbody id="comment-box">
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+
+</html>
