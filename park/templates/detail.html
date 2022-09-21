@@ -128,6 +128,11 @@
             comment()
         })
 
+        urlSearch = new URLSearchParams(location.search);
+        userId = urlSearch.get('username')
+        console.log(typeof(userId))
+        console.log(userId)
+
         function listing() {
             $.ajax({
                 type: "GET",
@@ -136,22 +141,18 @@
                 success: function (response) {
                     let writings = response['all_writing']
                     for (let i = 0; i < writings.length; i++) {
-                        let title = writings[i]['title']
-                        let content = writings[i]['content']
-                        let place = writings[i]['place']
-                        let channel = writings[i]['channel']
-                        let file = writings[i]['filepath']
-
+                        let writes = writings[i]
+                        // if (writes["_id"].includes(userId)){
                         let temp_html = `<div class="wrap">
                                             <img class="fit-picture"
-                                                 src="/static/${file}">
+                                                 src="/static/${writes["filepath"]}">
 
                                             <div class="form-group">
 
                                                 <div class="rows">
                                                     <tr>
-                                                        <h1>${title}</h1>
-                                                        <h2>${channel}</h2>
+                                                        <h1>${writes["title"]}</h1>
+                                                        <h2>${writes["channel"]}</h2>
                                                     </tr>
                                                 </div>
                                                 <div>
@@ -162,10 +163,10 @@
                                                         <tr>
                                                             <td>ID</td>
                                                             <td></td>
-                                                            <td>${place}</td>
+                                                            <td>${writes["place"]}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>${content}</td>
+                                                            <td>${writes["content"]}</td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -173,6 +174,9 @@
                                             </div>
                                         </div>`
                         $('#writing-box').append(temp_html)
+                        // }
+
+
                     }
                 }
             })
@@ -205,7 +209,7 @@
             $.ajax({
                 type: "POST",
                 url: "/comment_list",
-                data: {comment_give:comment},
+                data: {comment_give: comment},
                 success: function (response) {
                     alert(response["msg"])
                     window.location.reload()
@@ -270,19 +274,19 @@
         <button onclick="save_comment()" type="button" class="btn btn-outline-secondary">등록</button>
     </div>
     <div class="reviews">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col"></th>
-                    <th scope="col">댓글</th>
-                </tr>
-                </thead>
-                <tbody id="comment-box">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col"></th>
+                <th scope="col">댓글</th>
+            </tr>
+            </thead>
+            <tbody id="comment-box">
 
-                </tbody>
-            </table>
-        </div>
+            </tbody>
+        </table>
+    </div>
 
 </div>
 </body>

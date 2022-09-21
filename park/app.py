@@ -226,9 +226,7 @@ def save_comment():
     doc = {
               'comment': comment_receive
     }
-
     db.comment.insert_one(doc)
-
     return jsonify({})
 
 
