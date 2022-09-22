@@ -217,12 +217,7 @@
                     style="background-color: transparent; color: white; font-weight: bold
             " onclick="window.location.href='/place'">나만의 장소
             </button>
-            <figure class="media-left" style="align-self: center">
-                <a class="image is-32x32" href="/user/{{ user_info.username }}">
-                    <img class="is-rounded" src="{{ url_for('static', filename=user_info.profile_pic_real) }}">
-                </a>
-            </figure>
-            <p>{{user_info.username}}님</p>
+
 
         </nav>
     </div>
